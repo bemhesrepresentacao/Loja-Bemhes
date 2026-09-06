@@ -1,892 +1,308 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Loja Bemhes - Sistema de Gestão ERP 2025</title>
-  <!-- Bootstrap 5 CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- FontAwesome Icons -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --sidebar-width: 280px;
-      --primary-color: #1e293b;
-      --accent-color: #2563eb;
-      --accent-hover: #1d4ed8;
-      --bg-light: #f8fafc;
-      --border-color: #e2e8f0;
-      --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-    }
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--bg-light);
-      color: #334155;
-      overflow-x: hidden;
-    }
-    /* Layout */
-    #wrapper {
-      display: flex;
-      min-height: 100vh;
-    }
-    #sidebar {
-      width: var(--sidebar-width);
-      background: var(--primary-color);
-      color: #fff;
-      position: fixed;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      z-index: 1000;
-      transition: all 0.3s ease;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 4px 0 10px rgba(0,0,0,0.1);
-    }
-    #sidebar .brand {
-      padding: 1.5rem 1.25rem;
-      background: #0f172a;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-    }
-    #sidebar .brand i {
-      font-size: 1.5rem;
-      color: #38bdf8;
-    }
-    #sidebar .brand h5 {
-      margin: 0;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      font-size: 1.1rem;
-      color: #ffffff;
-    }
-    .nav-tabs-vertical {
-      flex: 1;
-      overflow-y: auto;
-      padding: 1rem 0;
-    }
-    .nav-tabs-vertical .nav-link {
-      color: #94a3b8;
-      padding: 0.75rem 1.25rem;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 0.875rem;
-      font-weight: 500;
-      border: none;
-      border-left: 3px solid transparent;
-      border-radius: 0;
-      transition: all 0.2s ease;
-      text-align: left;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .nav-tabs-vertical .nav-link:hover {
-      color: #f1f5f9;
-      background: rgba(255, 255, 255, 0.05);
-    }
-    .nav-tabs-vertical .nav-link.active {
-      color: #ffffff;
-      background: rgba(37, 99, 235, 0.15);
-      border-left-color: #38bdf8;
-      font-weight: 600;
-    }
-    .nav-tabs-vertical .nav-link i {
-      width: 20px;
-      text-align: center;
-      font-size: 1rem;
-    }
-    #content-wrapper {
-      margin-left: var(--sidebar-width);
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-    }
-    .navbar-top {
-      background: #ffffff;
-      border-bottom: 1px solid var(--border-color);
-      padding: 0.85rem 1.75rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 999;
-    }
-    .main-content {
-      padding: 1.75rem;
-      flex: 1;
-    }
-    /* Cards & Stats */
-    .stat-card {
-      background: #fff;
-      border-radius: 12px;
-      padding: 1.25rem;
-      border: 1px solid var(--border-color);
-      box-shadow: var(--card-shadow);
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      transition: transform 0.2s ease;
-    }
-    .stat-card:hover {
-      transform: translateY(-2px);
-    }
-    .stat-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.35rem;
-    }
-    /* Table Styling */
-    .card-data {
-      background: #ffffff;
-      border-radius: 12px;
-      border: 1px solid var(--border-color);
-      box-shadow: var(--card-shadow);
-      overflow: hidden;
-    }
-    .card-data-header {
-      padding: 1.25rem 1.5rem;
-      border-bottom: 1px solid var(--border-color);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 1rem;
-      background: #fafafa;
-    }
-    .table-responsive {
-      max-height: 650px;
-      overflow-y: auto;
-    }
-    .custom-table {
-      margin: 0;
-      font-size: 0.85rem;
-    }
-    .custom-table th {
-      background: #f1f5f9;
-      color: #475569;
-      font-weight: 600;
-      text-transform: uppercase;
-      font-size: 0.725rem;
-      letter-spacing: 0.5px;
-      padding: 0.85rem 1rem;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      white-space: nowrap;
-      border-bottom: 2px solid var(--border-color);
-    }
-    .custom-table td {
-      padding: 0.75rem 1rem;
-      vertical-align: middle;
-      white-space: nowrap;
-      border-bottom: 1px solid #f1f5f9;
-    }
-    .custom-table tbody tr:hover {
-      background-color: #f8fafc;
-    }
-    .action-btns .btn {
-      padding: 0.25rem 0.5rem;
-      font-size: 0.75rem;
-      border-radius: 6px;
-    }
-    /* Search Box */
-    .search-box {
-      position: relative;
-      min-width: 250px;
-    }
-    .search-box input {
-      padding-left: 2.25rem;
-      border-radius: 8px;
-      font-size: 0.875rem;
-      border: 1px solid var(--border-color);
-    }
-    .search-box i {
-      position: absolute;
-      left: 0.75rem;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #94a3b8;
-    }
-    /* Modal Styling */
-    .modal-content {
-      border-radius: 12px;
-      border: none;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    }
-    .modal-header {
-      background: var(--primary-color);
-      color: #fff;
-      border-top-left-radius: 12px;
-      border-top-right-radius: 12px;
-      padding: 1.25rem 1.5rem;
-    }
-    .modal-header .btn-close {
-      filter: invert(1);
-    }
-    .form-label {
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: #475569;
-      text-transform: uppercase;
-      margin-bottom: 0.35rem;
-    }
-    .form-control, .form-select {
-      font-size: 0.875rem;
-      border-radius: 8px;
-      padding: 0.55rem 0.75rem;
-      border: 1px solid var(--border-color);
-    }
-    .form-control:focus, .form-select:focus {
-      border-color: var(--accent-color);
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-    }
-    /* Pagination */
-    .pagination-container {
-      padding: 0.85rem 1.5rem;
-      border-top: 1px solid var(--border-color);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #fafafa;
-    }
-    /* Badge styling */
-    .badge-status {
-      padding: 0.35em 0.65em;
-      font-size: 0.75em;
-      font-weight: 600;
-      border-radius: 6px;
-    }
-    .badge-faturado { background: #dcfce7; color: #15803d; }
-    .badge-pendente { background: #fef9c3; color: #a16207; }
-    .badge-cancelado { background: #fee2e2; color: #b91c1c; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Controle Comercial - Bemhes</title>
+    <style>
+        :root {
+            --primary-color: #38383b;
+            --secondary-color: #8f725d;
+            --accent-color: #ded2b9;
+            --bg-color: #f4f4f6;
+            --text-color: #333;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            background-color: #28282a;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+
+        .menu-tabs {
+            list-style: none;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        .menu-tabs li {
+            padding: 15px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid #4a4a4d;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-tabs li:hover, .menu-tabs li.active {
+            background-color: var(--secondary-color);
+            color: var(--white);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .top-bar {
+            background-color: var(--white);
+            padding: 15px 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .top-bar h2 {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background-color: var(--secondary-color);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background-color: #755e4c;
+        }
+
+        .btn-danger {
+            background-color: #c94a4a;
+            color: var(--white);
+        }
+
+        .btn-danger:hover {
+            background-color: #b03b3b;
+        }
+
+        .btn-small {
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            margin-right: 5px;
+        }
+
+        /* Table Area */
+        .content-container {
+            padding: 30px;
+            overflow-auto: auto;
+            flex-grow: 1;
+        }
+
+        .table-wrapper {
+            background: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            overflow-x: auto;
+            max-height: calc(100vh - 180px);
+            border: 1px solid #e1e1e4;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.85rem;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            color: var(--primary-color);
+            padding: 12px 15px;
+            font-weight: 600;
+            border-bottom: 2px solid #e1e1e4;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #efeff1;
+            white-space: nowrap;
+        }
+
+        tr:hover {
+            background-color: #fafdff;
+        }
+
+        /* Modal Formulário */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            padding: 25px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e1e1e4;
+            padding-bottom: 10px;
+        }
+
+        .close-modal {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #666;
+        }
+
+        .form-group input, .form-group select {
+            padding: 8px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .form-actions {
+            margin-top: 25px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+    </style>
 </head>
 <body>
 
-<div id="wrapper">
-  <!-- Sidebar Nav -->
-  <div id="sidebar">
-    <div class="brand">
-      <i class="fa-solid fa-store"></i>
-      <div>
-        <h5>LOJA BEMHES</h5>
-        <small class="text-muted d-block" style="font-size: 0.7rem;">SISTEMA ERP 2025</small>
-      </div>
-    </div>
-    
-    <div class="nav nav-tabs-vertical" id="sheetTabs" role="tablist">
-      <!-- Tabs will be rendered here dynamically -->
+    <!-- Menu Lateral -->
+    <div class="sidebar">
+        <div class="sidebar-header">Bemhes Representações</div>
+        <ul class="menu-tabs">
+            <li class="active" onclick="switchTab('pedidos')">📦 Pedidos / Clientes</li>
+            <li onclick="switchTab('itens')">🛒 Itens do Pedido</li>
+            <li onclick="switchTab('segmentos')">🏢 Segmentos de Indústria</li>
+            <li onclick="switchTab('prazos')">💳 Prazos de Pagamento</li>
+            <li onclick="switchTab('regrasFrete')">🚚 Regras de Frete</li>
+        </ul>
     </div>
 
-    <div class="p-3 border-top border-secondary text-center">
-      <small class="text-secondary" style="font-size: 0.75rem;">Base de Dados Integrada<br>© 2025 LOJA BEMHES</small>
-    </div>
-  </div>
-
-  <!-- Content Wrapper -->
-  <div id="content-wrapper">
-    <!-- Top Navbar -->
-    <div class="navbar-top">
-      <div class="d-flex align-items-center gap-3">
-        <h4 class="m-0 font-weight-bold" id="currentSheetTitle" style="color: #1e293b;">Carregando...</h4>
-        <span class="badge bg-primary rounded-pill" id="totalRecordsBadge">0 registros</span>
-      </div>
-      <div class="d-flex align-items-center gap-3">
-        <button class="btn btn-outline-secondary btn-sm" onclick="exportCurrentToCSV()">
-          <i class="fa-solid fa-file-csv me-1"></i> Exportar CSV
-        </button>
-        <button class="btn btn-primary btn-sm d-flex align-items-center gap-2" onclick="openAddModal()">
-          <i class="fa-solid fa-plus"></i>
-          <span>Adicionar Registro</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- Main Content Body -->
+    <!-- Conteúdo Principal -->
     <div class="main-content">
-      
-      <!-- Dynamic Stats Row -->
-      <div class="row g-3 mb-4" id="statsRow">
-        <!-- Stats cards dynamically updated based on active sheet -->
-      </div>
-
-      <!-- Main Data Table Card -->
-      <div class="card card-data">
-        <div class="card-data-header">
-          <div class="search-box">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="searchInput" class="form-control" placeholder="Buscar nesta aba..." onkeyup="filterData()">
-          </div>
-          <div class="d-flex align-items-center gap-2">
-            <label class="small text-muted me-1">Mostrar:</label>
-            <select id="pageSizeSelect" class="form-select form-select-sm" style="width: auto;" onchange="changePageSize()">
-              <option value="15">15 linhas</option>
-              <option value="25" selected>25 linhas</option>
-              <option value="50">50 linhas</option>
-              <option value="100">100 linhas</option>
-            </select>
-          </div>
+        <div class="top-bar">
+            <h2 id="page-title">Gerenciamento de Pedidos</h2>
+            <button class="btn btn-primary" onclick="openAddModal()">+ Adicionar Registro</button>
         </div>
 
-        <div class="table-responsive">
-          <table class="table custom-table align-middle" id="dataTable">
-            <thead>
-              <tr id="tableHeadRow">
-                <!-- Headers rendered dynamically -->
-              </tr>
-            </thead>
-            <tbody id="tableBody">
-              <!-- Data rows rendered dynamically -->
-            </tbody>
-          </table>
+        <div class="content-container">
+            <div class="table-wrapper">
+                <table id="data-table">
+                    <thead id="table-head"></thead>
+                    <tbody id="table-body"></tbody>
+                </table>
+            </div>
         </div>
-
-        <div class="pagination-container">
-          <small class="text-muted" id="paginationInfo">Mostrando 0 de 0 registros</small>
-          <nav>
-            <ul class="pagination pagination-sm m-0" id="paginationControls">
-              <!-- Pagination controls dynamically rendered -->
-            </ul>
-          </nav>
-        </div>
-      </div>
     </div>
-  </div>
-</div>
 
-<!-- Modal Adicionar / Editar -->
-<div class="modal fade" id="crudModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title font-weight-bold" id="modalTitle">
-          <i class="fa-solid fa-pen-to-square me-2"></i> Adicionar Registro
-        </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form id="crudForm" class="row g-3">
-          <!-- Inputs dynamically rendered -->
-        </form>
-      </div>
-      <div class="modal-footer bg-light">
-        <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-primary" onclick="saveRecord()">
-          <i class="fa-solid fa-floppy-disk me-1"></i> Salvar
-        </button>
-      </div>
+    <!-- Modal Dinâmico de Formulário -->
+    <div class="modal" id="crud-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Adicionar Registro</h3>
+                <span class="close-modal" onclick="closeModal()">&times;</span>
+            </div>
+            <form id="dynamic-form" onsubmit="saveForm(event)">
+                <input type="hidden" id="edit-index">
+                <div class="form-grid" id="form-fields"></div>
+                <div class="form-actions">
+                    <button type="button" class="btn" style="background:#e1e1e4" onclick="closeModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
     </div>
-  </div>
-</div>
 
-<!-- Modal Confirmar Exclusão -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header bg-danger text-white">
-        <h5 class="modal-title font-weight-bold">
-          <i class="fa-solid fa-triangle-exclamation me-2"></i> Confirmar Exclusão
-        </h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body text-center py-4">
-        <i class="fa-solid fa-trash-can text-danger fa-3x mb-3"></i>
-        <p class="mb-1 fw-bold fs-5">Tem certeza que deseja excluir este registro?</p>
-        <p class="text-muted small">Esta ação afetará os dados da aba atual localmente na sessão.</p>
-      </div>
-      <div class="modal-footer bg-light justify-content-center">
-        <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-danger px-4" onclick="confirmDelete()">Excluir Definitivamente</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Toast Feedback -->
-<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1080;">
-  <div id="liveToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="d-flex">
-      <div class="toast-body" id="toastMessage">
-        Operação realizada com sucesso!
-      </div>
-      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-    </div>
-  </div>
-</div>
-
-<!-- Bootstrap 5 JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-<script>
-  // Global Data Store loaded from Python injection
-  let rawExcelData = {};
-</script>
-<script src="excel_data.js"></script>
-
-<script>
-  // Icons mapping for sheets
-  const sheetIcons = {
-    'PEDIDO CABEÇALHO': 'fa-file-invoice-dollar',
-    'PEDIDO PRODUTOS': 'fa-boxes-stacked',
-    'Código de Industria': 'fa-industry',
-    'ANO FISCAL TESTE': 'fa-calendar-check',
-    'ANO FISCAL': 'fa-calendar-days',
-    'Prazo de Pagamento': 'fa-credit-card',
-    'COMISSÃO': 'fa-hand-holding-dollar',
-    'MÊSANO': 'fa-clock',
-    'PAINEL INICIAL': 'fa-chart-pie',
-    'PAINEL FATURAMENTO': 'fa-chart-line',
-    'REGRAS PARA FATURAMENTO': 'fa-sliders'
-  };
-
-  let activeSheet = '';
-  let activeData = [];
-  let filteredData = [];
-  let currentPage = 1;
-  let pageSize = 25;
-  let editingIndex = -1;
-  let deletingIndex = -1;
-
-  // Bootstrap Modals & Toasts
-  let crudModal, deleteModal, liveToast;
-
-  document.addEventListener('DOMContentLoaded', () => {
-    crudModal = new bootstrap.Modal(document.getElementById('crudModal'));
-    deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
-    liveToast = new bootstrap.Toast(document.getElementById('liveToast'));
-
-    // Check if rawExcelData exists
-    if (!window.rawExcelData || Object.keys(window.rawExcelData).length === 0) {
-      console.error("No excel data loaded!");
-      return;
-    }
-
-    renderTabs();
-    
-    // Select first tab
-    const firstSheet = Object.keys(window.rawExcelData)[0];
-    if (firstSheet) {
-      switchSheet(firstSheet);
-    }
-  });
-
-  function renderTabs() {
-    const tabList = document.getElementById('sheetTabs');
-    tabList.innerHTML = '';
-
-    Object.keys(window.rawExcelData).forEach(sheetName => {
-      const iconClass = sheetIcons[sheetName] || 'fa-table';
-      const count = window.rawExcelData[sheetName].length;
-
-      const btn = document.createElement('button');
-      btn.className = 'nav-link';
-      btn.id = `tab-${sheetName.replace(/\s+/g, '-')}`;
-      btn.setAttribute('type', 'button');
-      btn.onclick = () => switchSheet(sheetName);
-      btn.innerHTML = `
-        <i class="fa-solid ${iconClass}"></i>
-        <span class="flex-grow-1 text-truncate">${sheetName}</span>
-        <span class="badge bg-secondary rounded-pill" style="font-size:0.65rem;">${count}</span>
-      `;
-      tabList.appendChild(btn);
-    });
-  }
-
-  function switchSheet(sheetName) {
-    activeSheet = sheetName;
-    currentPage = 1;
-    document.getElementById('searchInput').value = '';
-
-    // Update Tab Classes
-    document.querySelectorAll('#sheetTabs .nav-link').forEach(btn => btn.classList.remove('active'));
-    const activeBtn = document.getElementById(`tab-${sheetName.replace(/\s+/g, '-')}`);
-    if (activeBtn) activeBtn.classList.add('active');
-
-    // Title
-    document.getElementById('currentSheetTitle').innerText = sheetName;
-
-    // Load Data
-    activeData = window.rawExcelData[sheetName] || [];
-    filteredData = [...activeData];
-
-    renderStats();
-    renderTable();
-  }
-
-  function renderStats() {
-    const statsRow = document.getElementById('statsRow');
-    statsRow.innerHTML = '';
-    
-    const totalCount = activeData.length;
-    document.getElementById('totalRecordsBadge').innerText = `${totalCount} registros`;
-
-    // Calculate sheet-specific metrics if numerical columns exist
-    let cols = totalCount > 0 ? Object.keys(activeData[0]) : [];
-    let numericCols = cols.filter(col => {
-      return activeData.some(row => {
-        let val = row[col];
-        return val !== "" && !isNaN(Number(val)) && typeof val !== 'boolean';
-      });
-    });
-
-    // Main Card 1: Total Records
-    let card1 = `
-      <div class="col-md-4 col-sm-6">
-        <div class="stat-card">
-          <div class="stat-icon bg-primary-subtle text-primary">
-            <i class="fa-solid fa-database"></i>
-          </div>
-          <div>
-            <div class="text-muted small fw-semibold">Total de Registros</div>
-            <div class="fs-4 fw-bold text-dark">${totalCount.toLocaleString('pt-BR')}</div>
-          </div>
-        </div>
-      </div>
-    `;
-    statsRow.innerHTML += card1;
-
-    // Card 2 & 3: Sums or metrics if numeric cols exist
-    if (numericCols.length > 0) {
-      let firstNumCol = numericCols.find(c => c.toUpperCase().includes('SUBTOTAL') || c.toUpperCase().includes('VALOR') || c.toUpperCase().includes('QUANT')) || numericCols[0];
-      let sum = activeData.reduce((acc, row) => acc + (parseFloat(row[firstNumCol]) || 0), 0);
-
-      let isCurrency = firstNumCol.toUpperCase().includes('SUBTOTAL') || firstNumCol.toUpperCase().includes('VALOR') || firstNumCol.toUpperCase().includes('PRECO') || firstNumCol.toUpperCase().includes('COMISSÃO');
-      let formattedValue = isCurrency 
-        ? sum.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) 
-        : sum.toLocaleString('pt-BR', { maximumFractionDigits: 2 });
-
-      let card2 = `
-        <div class="col-md-4 col-sm-6">
-          <div class="stat-card">
-            <div class="stat-icon bg-success-subtle text-success">
-              <i class="fa-solid ${isCurrency ? 'fa-sack-dollar' : 'fa-calculator'}"></i>
-            </div>
-            <div>
-              <div class="text-muted small fw-semibold">Soma: ${firstNumCol}</div>
-              <div class="fs-4 fw-bold text-dark">${formattedValue}</div>
-            </div>
-          </div>
-        </div>
-      `;
-      statsRow.innerHTML += card2;
-
-      // Card 3: Average
-      let avg = totalCount > 0 ? sum / totalCount : 0;
-      let formattedAvg = isCurrency 
-        ? avg.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) 
-        : avg.toLocaleString('pt-BR', { maximumFractionDigits: 2 });
-
-      let card3 = `
-        <div class="col-md-4 col-sm-6">
-          <div class="stat-card">
-            <div class="stat-icon bg-info-subtle text-info">
-              <i class="fa-solid fa-chart-simple"></i>
-            </div>
-            <div>
-              <div class="text-muted small fw-semibold">Média por Registro</div>
-              <div class="fs-4 fw-bold text-dark">${formattedAvg}</div>
-            </div>
-          </div>
-        </div>
-      `;
-      statsRow.innerHTML += card3;
-    } else {
-      // Default info card
-      let card2 = `
-        <div class="col-md-4 col-sm-6">
-          <div class="stat-card">
-            <div class="stat-icon bg-warning-subtle text-warning">
-              <i class="fa-solid fa-columns"></i>
-            </div>
-            <div>
-              <div class="text-muted small fw-semibold">Colunas Ativas</div>
-              <div class="fs-4 fw-bold text-dark">${cols.length} campos</div>
-            </div>
-          </div>
-        </div>
-      `;
-      statsRow.innerHTML += card2;
-    }
-  }
-
-  function filterData() {
-    const term = document.getElementById('searchInput').value.toLowerCase().trim();
-    if (!term) {
-      filteredData = [...activeData];
-    } else {
-      filteredData = activeData.filter(row => {
-        return Object.values(row).some(val => 
-          String(val).toLowerCase().includes(term)
-        );
-      });
-    }
-    currentPage = 1;
-    renderTable();
-  }
-
-  function changePageSize() {
-    pageSize = parseInt(document.getElementById('pageSizeSelect').value);
-    currentPage = 1;
-    renderTable();
-  }
-
-  function renderTable() {
-    const thead = document.getElementById('tableHeadRow');
-    const tbody = document.getElementById('tableBody');
-    thead.innerHTML = '';
-    tbody.innerHTML = '';
-
-    if (filteredData.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="100" class="text-center py-5 text-muted"><i class="fa-solid fa-folder-open fa-2x mb-3 d-block"></i>Nenhum registro encontrado nesta aba.</td></tr>`;
-      document.getElementById('paginationInfo').innerText = "Mostrando 0 de 0 registros";
-      document.getElementById('paginationControls').innerHTML = "";
-      return;
-    }
-
-    // Determine columns from first item or sample
-    let columns = Object.keys(filteredData[0]);
-
-    // Table Headers
-    columns.forEach(col => {
-      const th = document.createElement('th');
-      th.innerText = col;
-      thead.appendChild(th);
-    });
-    // Actions Header
-    const thAction = document.createElement('th');
-    thAction.className = 'text-center';
-    thAction.style.width = '100px';
-    thAction.innerText = 'Ações';
-    thead.appendChild(thAction);
-
-    // Pagination calculations
-    const totalItems = filteredData.length;
-    const totalPages = Math.ceil(totalItems / pageSize);
-    if (currentPage > totalPages) currentPage = totalPages;
-
-    const startIndex = (currentPage - 1) * pageSize;
-    const endIndex = Math.min(startIndex + pageSize, totalItems);
-    const pageItems = filteredData.slice(startIndex, endIndex);
-
-    // Render Rows
-    pageItems.forEach((row, idx) => {
-      const realIndex = activeData.indexOf(row);
-      const tr = document.createElement('tr');
-
-      columns.forEach(col => {
-        const td = document.createElement('td');
-        let val = row[col] !== undefined && row[col] !== null ? String(row[col]) : '';
-
-        // Formatting highlights for status or numbers
-        if (col.toUpperCase() === 'STATUS') {
-          let badgeClass = 'badge-pendente';
-          if (val.toLowerCase().includes('faturado')) badgeClass = 'badge-faturado';
-          if (val.toLowerCase().includes('cancel')) badgeClass = 'badge-cancelado';
-          td.innerHTML = `<span class="badge badge-status ${badgeClass}">${val}</span>`;
-        } else {
-          td.innerText = val;
-        }
-
-        tr.appendChild(td);
-      });
-
-      // Actions Column
-      const tdActions = document.createElement('td');
-      tdActions.className = 'text-center action-btns';
-      tdActions.innerHTML = `
-        <button class="btn btn-outline-primary btn-sm me-1" title="Editar" onclick="openEditModal(${realIndex})">
-          <i class="fa-solid fa-pen"></i>
-        </button>
-        <button class="btn btn-outline-danger btn-sm" title="Excluir" onclick="openDeleteModal(${realIndex})">
-          <i class="fa-solid fa-trash"></i>
-        </button>
-      `;
-      tr.appendChild(tdActions);
-
-      tbody.appendChild(tr);
-    });
-
-    // Pagination info
-    document.getElementById('paginationInfo').innerText = `Mostrando ${startIndex + 1} a ${endIndex} de ${totalItems} registros`;
-
-    // Render Pagination Controls
-    renderPaginationControls(totalPages);
-  }
-
-  function renderPaginationControls(totalPages) {
-    const controls = document.getElementById('paginationControls');
-    controls.innerHTML = '';
-
-    if (totalPages <= 1) return;
-
-    // Prev
-    const prevLi = document.createElement('li');
-    prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
-    prevLi.innerHTML = `<a class="page-link" href="#" onclick="gotoPage(${currentPage - 1}); return false;">Anterior</a>`;
-    controls.appendChild(prevLi);
-
-    // Page Numbers
-    let startPage = Math.max(1, currentPage - 2);
-    let endPage = Math.min(totalPages, currentPage + 2);
-
-    for (let i = startPage; i <= endPage; i++) {
-      const li = document.createElement('li');
-      li.className = `page-item ${i === currentPage ? 'active' : ''}`;
-      li.innerHTML = `<a class="page-link" href="#" onclick="gotoPage(${i}); return false;">${i}</a>`;
-      controls.appendChild(li);
-    }
-
-    // Next
-    const nextLi = document.createElement('li');
-    nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
-    nextLi.innerHTML = `<a class="page-link" href="#" onclick="gotoPage(${currentPage + 1}); return false;">Próximo</a>`;
-    controls.appendChild(nextLi);
-  }
-
-  function gotoPage(page) {
-    if (page < 1 || page > Math.ceil(filteredData.length / pageSize)) return;
-    currentPage = page;
-    renderTable();
-  }
-
-  // --- CRUD OPERATIONS ---
-
-  function openAddModal() {
-    editingIndex = -1;
-    document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-plus-circle me-2"></i> Adicionar Registro em [${activeSheet}]`;
-    buildFormFields({});
-    crudModal.show();
-  }
-
-  function openEditModal(index) {
-    editingIndex = index;
-    document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-pen-to-square me-2"></i> Editar Registro em [${activeSheet}]`;
-    const record = activeData[index];
-    buildFormFields(record);
-    crudModal.show();
-  }
-
-  function buildFormFields(record) {
-    const form = document.getElementById('crudForm');
-    form.innerHTML = '';
-
-    // Extract columns from current dataset or first active item
-    let columns = activeData.length > 0 ? Object.keys(activeData[0]) : ['ID', 'NOME', 'VALOR', 'DESCRICAO'];
-
-    columns.forEach(col => {
-      const colDiv = document.createElement('div');
-      colDiv.className = 'col-md-6';
-
-      const label = document.createElement('label');
-      label.className = 'form-label';
-      label.innerText = col;
-
-      const val = record[col] !== undefined ? record[col] : '';
-
-      const input = document.createElement('input');
-      input.type = 'text';
-      input.className = 'form-control';
-      input.name = col;
-      input.value = val;
-
-      colDiv.appendChild(label);
-      colDiv.appendChild(input);
-      form.appendChild(colDiv);
-    });
-  }
-
-  function saveRecord() {
-    const form = document.getElementById('crudForm');
-    const formData = new FormData(form);
-    const newRecord = {};
-
-    formData.forEach((value, key) => {
-      newRecord[key] = value;
-    });
-
-    if (editingIndex === -1) {
-      // Add new
-      activeData.unshift(newRecord);
-      showToast('Registro adicionado com sucesso!');
-    } else {
-      // Edit existing
-      activeData[editingIndex] = newRecord;
-      showToast('Registro atualizado com sucesso!');
-    }
-
-    // Refresh views
-    filterData();
-    renderStats();
-    renderTabs(); // Updates counts
-    crudModal.hide();
-  }
-
-  function openDeleteModal(index) {
-    deletingIndex = index;
-    deleteModal.show();
-  }
-
-  function confirmDelete() {
-    if (deletingIndex >= 0 && deletingIndex < activeData.length) {
-      activeData.splice(deletingIndex, 1);
-      showToast('Registro excluído com sucesso!');
-      filterData();
-      renderStats();
-      renderTabs();
-    }
-    deleteModal.hide();
-  }
-
-  function showToast(message) {
-    document.getElementById('toastMessage').innerText = message;
-    liveToast.show();
-  }
-
-  function exportCurrentToCSV() {
-    if (!filteredData || filteredData.length === 0) {
-      alert('Não há dados para exportar!');
-      return;
-    }
-
-    const keys = Object.keys(filteredData[0]);
-    let csvContent = "data:text/csv;charset=utf-8,﻿"; // UTF-8 BOM
-
-    // Header
-    csvContent += keys.join(";") + "
-";
-
-    // Rows
-    filteredData.forEach(row => {
-      let rowValues = keys.map(k => {
-        let val = row[k] !== undefined && row[k] !== null ? String(row[k]) : '';
-        val = val.replace(/"/g, '""'); // Escape quotes
-        return `"${val}"`;
-      });
-      csvContent += rowValues.join(";") + "
-";
-    });
-
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `${activeSheet}_Export.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
-</script>
-
-</body>
-</html>
+    <script>
+        // --- BASE DE DADOS INICIAL INTEGRADA (Abas do Excel) ---
+        const db = {
+            pedidos: [
+                { pedido: "1", status: "Faturado", tipo: "USO E CONSUMO PROPRIO", razao: "JOSE UMBERTO PELOGIA", cliente: "76006", cidade: "APUCARANA", estado: "PR", data: "2018-03-15", vendedor: "MARCOS CERON BENETON", nf: "50330" },
+                { pedido: "2", status: "Faturado", tipo: "USO E CONSUMO PROPRIO", razao: "PEDREIRA INGA IND.COM.LTDA.", cliente: "76020", cidade: "MARINGÁ", estado: "PR", data: "2018-03-16", vendedor: "MARCOS CERON BENETON", nf: "50372" },
+                { pedido: "3", status: "Faturado", tipo: "USO E CONSUMO PROPRIO", razao: "PEDREIRA INGA IND.COM.LTDA.", cliente: "76020", cidade: "MARINGÁ", estado: "PR", data: "2018-03-16", vendedor: "MARCOS CERON BENETON", nf: "50373" },
+                { pedido: "4", status: "Faturado", tipo: "USO E CONSUMO PROPRIO", razao: "GLEICE DIAS DA SILVA", cliente: "76042", cidade: "APUCARANA", estado: "PR", data: "2018-03-22", vendedor: "MARCOS CERON BENETON", nf: "50511" },
+                { pedido: "665", status: "FATURADO", tipo: "USO E CONSUMO PRÓPRIO", razao: "V.R.L CABRAL E CIA LTDA", cliente: "200163", cidade: "ARAPONGAS", estado: "PR", data: "2026-08-28", vendedor: "MARCOS CERON BENETON", nf: "107408" }
+            ],
+            itens: [
+                { pedido: "1", item: "1", produto: "PREMALUBE 2 - 20 kgs", codigo: "4401", quant: "1", preco: "99.00", subtotal: "1980.00", comissao: "297.00" },
+                { pedido: "2", item: "1", produto: "PREMALUBE 2 - 20 kgs", codigo: "4401", quant: "1", preco: "79.00", subtotal: "14299.00", comissao: "2144.85" },
+                { pedido: "3", item: "1", produto: "COOL-STRETCH PLUS", codigo: "1462", quant: "1", preco: "100.00", subtotal: "2000.00", comissao: "300.00" },
